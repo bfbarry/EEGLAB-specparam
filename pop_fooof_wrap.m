@@ -1,24 +1,24 @@
-function fooof_results = fooof_wrap(data, ALLEEG, cluster, design, f_range, mode, settings)
+function fooof_results = pop_fooof_wrap(EEG, ALLEEG, f_range, mode, settings)
     % Author: The Voytek Lab and Brian Barry 
     % Calls FOOOF wrapper on spectral data from EEGLAB
     
-    % TODO: extract study design to accommodate foof_group()
+    % TODO: should this use fooof_group too? 
+    % - if so, want to incorporate foof_group()
     % - incorporate statistics 
-    % Decide on what to return
-    % implement pop_ and std_ functions for GUI and plotting
+    % - Decide on what to return
     
     % For fooof related docs see: https://github.com/fooof-tools/fooof_mat/blob/master/fooof_mat/
     
     % For relevant EEGLAB related docs see:
-    % - For study: https://github.com/sccn/eeglab/blob/develop/functions/studyfunc/std_specplot.m
+    % https://github.com/sccn/eeglab/blob/develop/functions/popfunc/pop_spectopo.m
+    
+    % if mode = 'single', runs fooof.m (mode is tentative)
+    % if mode = 'group', runs fooof_group.m (once again unless a std_fooof_wrap.m is created)
     
     % Inputs:
-    % data is either EEG or STUDY (unless a std_fooof_wrap.m is created)
-    % cluster = cluster # for study
-    % design = design #
-    % if mode = 'single', runs fooof.m 
-    % if mode = 'group', runs fooof_group.m (once again unless a std_fooof_wrap.m is created)
+    % EEG, ALLEEG
     %   f_range         = fitting range (Hz)
+    %   power_spectrum  = row vector of power values (in group case psds = matrix of power values, which each row representing a spectrum)
     %   settings        = fooof model settings, in a struct, including:
     %       settings.peak_width_limts
     %       settings.max_n_peaks
@@ -41,7 +41,7 @@ function fooof_results = fooof_wrap(data, ALLEEG, cluster, design, f_range, mode
     %            fooof_results.fooofed_spectrum
     %            fooof_results.ap_fit
     
-    if nargin < 7 % need a better way to check because design may be empty too
+    if nargin < 5 % need a better way to check because design may be empty too
         settings = struct(); % empty settings      
     end
     
