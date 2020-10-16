@@ -47,21 +47,23 @@ function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, f_range, set
         return_model = false; % shape needs to be reexamined
     end
     
-    plot_model = false; %currently unused
+    if ~exist('plot_model', 'var')
+        plot_model = false; % shape needs to be reexamined
+    end
     
     design_var = STUDY.design(STUDY.currentdesign).variable.value; %cell array of design variables
     std_fooof_results = cell([numel(cluster), 1]); 
     
     for c = 1:numel(cluster)
-        [STUDY, specdata, freqs] = std_specplot(STUDY,ALLEEG, 'clusters', cluster(c)); 
+        [STUDY, specdata, specfreqs] = std_specplot(STUDY,ALLEEG, 'clusters', cluster(c)); 
         
         fooof_results_c = cell([numel(design_var), 1]);
         for v = 1:numel(design_var) 
-            results_v = fooof_group(freqs, specdata{v}, f_range, settings, return_model); %specdata at design variable v shape {powers x trials}
+            results_v = fooof_group(specfreqs, specdata{v}, f_range, settings, return_model); %specdata at design variable v shape {powers x trials}
             fooof_results_c{v} = results_v;
             % now foof_results is an array of fitting data, each index are fooof results for a condition in the design
         end
-        std_fooof_results{c} = fooof_results_c
+        std_fooof_results{c} = fooof_results_c;
     end
 
     
