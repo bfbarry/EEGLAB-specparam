@@ -1,4 +1,4 @@
-function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, f_range, settings, return_model, plot_model)
+function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, fit_mode, f_range, settings, return_model, plot_model)
     % Author: The Voytek Lab and Brian Barry 
     % Calls FOOOF wrapper on spectral data from EEGLAB 
     
@@ -12,8 +12,13 @@ function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, f_range, set
     % - For study: https://github.com/sccn/eeglab/blob/develop/functions/studyfunc/std_specplot.m
     
     % Inputs:
-    % EEG, ALLEEG
+    % STUDY, ALLEEG
     % cluster is a range or array of clusters, e.g. 3:14
+    % fit_mode: if 'group' (default), performs fooof_group for each design variable spectrum
+    %    if 'across design' performs fooof_group on spectrum of averaged design variables
+    %    if 'individual' performs fooof on each averaged design variable
+
+    % FOOOF specific inputs:  
     %   f_range         = fitting range (Hz)
     %   psds = matrix of power values, which each row representing a spectrum (in single case power_spectrum  = row vector of power values)
     %   settings        = fooof model settings, in a struct, including:
@@ -39,6 +44,10 @@ function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, f_range, set
     %            fooof_results.ap_fit
     addpath('fooof_mat');
     
+    if ~exist('fit_mode', 'var')
+        fit_mode = 'group';
+    end
+
     if ~exist('settings', 'var')
         settings = struct();
     end
@@ -57,13 +66,37 @@ function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, f_range, set
     for c = 1:numel(cluster)
         [STUDY, specdata, specfreqs] = std_specplot(STUDY,ALLEEG, 'clusters', cluster(c)); 
         
-        fooof_results_c = cell([numel(design_var), 1]);
-        for v = 1:numel(design_var) 
-            results_v = fooof_group(specfreqs, specdata{v}, f_range, settings, return_model); %specdata at design variable v shape {powers x trials}
-            fooof_results_c{v} = results_v;
-            % now foof_results is an array of fitting data, each index are fooof results for a condition in the design
+        if fit_mode == 'group'
+            fooof_results_c = cell([numel(design_var), 1]);
+            for v = 1:numel(design_var) 
+                results_v = fooof_group(specfreqs, specdata{v}, f_range, settings, return_model); %specdata at design variable v shape {powers x trials}
+                fooof_results_c{v} = results_v;
+            end
+            std_fooof_results{c} = fooof_results_c;
+
+        elseif fit_mode = 'across design'
+            design_spec = cell([numel(design_var), 1]); %this is what you see when you plot spectrum for a cluster in EEGLAB
+            for v = 1:numel(design_var)
+                spec_mean = mean(specdata{v}, 2); 
+                design_spec{v} = spec_mean; 
+            end
+            fooof_results_c = fooof_group(specfreqs, horzcat(design_spec{:}), f_range, settings, return_model); %horzcat makes designspec dims |psds| x #design variables
+            std_fooof_results{c} = fooof_results_c;
+        
+        elseif fit_mode = 'individual'
+            fooof_results_c = cell([numel(design_var), 1]);
+            for v = 1:numel(design_var) 
+                spec_mean = mean(specdata{v}, 2);
+                results_v = fooof(specfreqs, spec_mean, f_range, settings, return_model);
+                fooof_results_c{v} = results_v;
+            end
+            std_fooof_results{c} = fooof_results_c;
+
         end
-        std_fooof_results{c} = fooof_results_c;
+    end
+
+    if plot_model %in development
+        ;
     end
 
     

@@ -29,6 +29,9 @@
 %     input settings as an empty struct.
 
 function fooof_results = fooof_group(freqs, psds, f_range, settings, return_model)
+    if ~exist('return_model', 'var')
+        return_model = false; 
+    end
 
     % Check settings - get defaults for those not provided
     settings = fooof_check_settings(settings);

@@ -1,5 +1,6 @@
 function dev_fooof_results = dev_fooof_wrap(cluster, f_range, settings, return_model, plot_model)
     % For testing matlab FOOOF with external data
+    % paste this for quick command line loading: load('~/Desktop/IversenLab/fooof_tests/dip_only/brian_diponly_3_spectra.mat')
 
     addpath('fooof_mat');
     if ~exist('settings', 'var')

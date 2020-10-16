@@ -16,6 +16,8 @@ error:
 
 ### TODO:
 - std_fooof_wrap.m
+    - working on other fitting options like individual fits to each averaged design variable (fooof not fooof_group)
+
 - pop_fooof_wrap.m
 - and one for channel spectra? (as in pop_spectopo.m)
 - look into statistics (std_stat.m)
