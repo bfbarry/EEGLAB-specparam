@@ -74,7 +74,7 @@ function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, fit_mode, f_
             end
             std_fooof_results{c} = fooof_results_c;
 
-        elseif fit_mode = 'across design'
+        elseif fit_mode == 'across design'
             design_spec = cell([numel(design_var), 1]); %this is what you see when you plot spectrum for a cluster in EEGLAB
             for v = 1:numel(design_var)
                 spec_mean = mean(specdata{v}, 2); 
@@ -83,7 +83,7 @@ function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, fit_mode, f_
             fooof_results_c = fooof_group(specfreqs, horzcat(design_spec{:}), f_range, settings, return_model); %horzcat makes designspec dims |psds| x #design variables
             std_fooof_results{c} = fooof_results_c;
         
-        elseif fit_mode = 'individual'
+        elseif fit_mode == 'individual'
             fooof_results_c = cell([numel(design_var), 1]);
             for v = 1:numel(design_var) 
                 spec_mean = mean(specdata{v}, 2);
