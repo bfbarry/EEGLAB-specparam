@@ -1,6 +1,6 @@
-function fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, f_range, mode, settings)
+function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, f_range, settings, return_model, plot_model)
     % Author: The Voytek Lab and Brian Barry 
-    % Calls FOOOF wrapper on spectral data from EEGLAB
+    % Calls FOOOF wrapper on spectral data from EEGLAB 
     
     % TODO: extract study design to accommodate foof_group()
     % - incorporate statistics 
@@ -11,11 +11,9 @@ function fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, f_range, mode, s
     % For relevant EEGLAB related docs see:
     % - For study: https://github.com/sccn/eeglab/blob/develop/functions/studyfunc/std_specplot.m
     
-    % if mode = 'single', runs fooof.m (mode is tentative)
-    % if mode = 'group', runs fooof_group.m (once again unless a std_fooof_wrap.m is created)
-    
     % Inputs:
     % EEG, ALLEEG
+    % cluster is a range or array of clusters, e.g. 3:14
     %   f_range         = fitting range (Hz)
     %   psds = matrix of power values, which each row representing a spectrum (in single case power_spectrum  = row vector of power values)
     %   settings        = fooof model settings, in a struct, including:
@@ -25,7 +23,7 @@ function fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, f_range, mode, s
     %       settings.peak_threshold
     %       settings.aperiodic_mode
     %       settings.verbose
-    %   for single mode only: return_model    = boolean of whether to return the FOOOF model fit, optional
+    %    return_model    = boolean of whether to return the FOOOF model fit, optional
     
     % Current outputs (default from fooof_mat)
     %   fooof_results   = fooof model ouputs, in a struct, including:
@@ -39,37 +37,36 @@ function fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, f_range, mode, s
     %            fooof_results.power_spectrum
     %            fooof_results.fooofed_spectrum
     %            fooof_results.ap_fit
+    addpath('fooof_mat');
     
-    test_ = 1; %test functionality with externally saved spectral data
-    test_mode = 'group'
-    if nargin < 6 % need a better way to check because design may be empty too
-        settings = struct(); % empty settings
+    if ~exist('settings', 'var')
+        settings = struct();
+    end
+
+    if ~exist('return_model', 'var')
+        return_model = false; % shape needs to be reexamined
     end
     
-    % 
-    if test_
-        load('~/Desktop/IversenLab/fooof_tests/dip_only/brian_diponly_3_spectra.mat');
-        design_size = 4;
+    plot_model = false; %currently unused
+    
+    design_var = STUDY.design(STUDY.currentdesign).variable.value; %cell array of design variables
+    std_fooof_results = cell([numel(cluster), 1]); 
+    
+    for c = 1:numel(cluster)
+        [STUDY, specdata, freqs] = std_specplot(STUDY,ALLEEG, 'clusters', cluster(c)); 
         
-
-    end
-
-
-    if lower(mode) == 'single'
-        % How to extract spectra for a dataset?  (probably by component?)
-        fooof_results = fooof(freqs, power_spectrum, f_range, settings, 'return_model', true);
-    elseif lower(mode) == 'group' 
-        STUDY, specdata, freqs = std_specplot(STUDY,ALLEEG, 'clusters', cluster); 
-        design = STUDY.design(design).variable
-        % need to decide on shape of specdata from study design 
-        fooof_results = zeros(size(design)(2))
-        for i = 1:size(design)(2) % for now assumes design is a 1xn array of conditions
-            temp_results = fooof_group(freqs, specdata, f_range, settings); %where specdata is an array of spectra
-            fooof_results = [fooof_results, temp_results]
+        fooof_results_c = cell([numel(design_var), 1]);
+        for v = 1:numel(design_var) 
+            results_v = fooof_group(freqs, specdata{v}, f_range, settings, return_model); %specdata at design variable v shape {powers x trials}
+            fooof_results_c{v} = results_v;
             % now foof_results is an array of fitting data, each index are fooof results for a condition in the design
         end
-        
+        std_fooof_results{c} = fooof_results_c
     end
+
+    
+
+    
         
     
     

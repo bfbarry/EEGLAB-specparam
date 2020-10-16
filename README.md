@@ -3,6 +3,17 @@
 make sure Matlab's version of Python is on 3.X
 - This can be done via `pyversion 3.X` or `pyversion location`
 
+changes to FOOOF_MAT:
+- added a return_model to fooof_group.m but not working 
+
+error:
+
+    Error using plot
+    Data must be a single matrix Y or a list of pairs X,Y.
+
+    Error in fooof_plot (line 38)
+        data = plot(plt_freqs, fooof_results.power_spectrum, 'black');
+
 ### TODO:
 - std_fooof_wrap.m
 - pop_fooof_wrap.m
