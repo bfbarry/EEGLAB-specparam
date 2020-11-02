@@ -45,10 +45,10 @@ function fooof_results = pop_fooof_wrap(EEG, ALLEEG, f_range, mode, settings)
         settings = struct(); % empty settings      
     end
     
-    if lower(mode) == 'single'
+    if strcmpi(mode, 'single')
         % How to extract spectra for a dataset?  (probably by component?)
         fooof_results = fooof(freqs, psd, f_range, settings, 'return_model', true);
-    elseif lower(mode) == 'group' 
+    elseif strcmpi(mode, 'group')
         STUDY, specdata, freqs = std_specplot(STUDY,ALLEEG, 'clusters', cluster); 
         design = STUDY.design(design).variable
         % need to decide on shape of specdata from study design 

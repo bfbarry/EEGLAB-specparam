@@ -66,7 +66,7 @@ function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, fit_mode, f_
     for c = 1:numel(cluster)
         [STUDY, specdata, specfreqs] = std_specplot(STUDY,ALLEEG, 'clusters', cluster(c)); 
         
-        if fit_mode == 'group'
+        if strcmpi(fit_mode, 'group')
             fooof_results_c = cell([numel(design_var), 1]);
             for v = 1:numel(design_var) 
                 results_v = fooof_group(specfreqs, specdata{v}, f_range, settings, return_model); %specdata at design variable v shape {powers x trials}
@@ -74,7 +74,7 @@ function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, fit_mode, f_
             end
             std_fooof_results{c} = fooof_results_c;
 
-        elseif fit_mode == 'across design'
+        elseif strcmpi(fit_mode, 'across design')
             design_spec = cell([numel(design_var), 1]); %this is what you see when you plot spectrum for a cluster in EEGLAB
             for v = 1:numel(design_var)
                 spec_mean = mean(specdata{v}, 2); 
@@ -83,7 +83,7 @@ function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, fit_mode, f_
             fooof_results_c = fooof_group(specfreqs, horzcat(design_spec{:}), f_range, settings, return_model); %horzcat makes designspec dims |psds| x #design variables
             std_fooof_results{c} = fooof_results_c;
         
-        elseif fit_mode == 'individual'
+        elseif strcmpi(fit_mode, 'individual')
             fooof_results_c = cell([numel(design_var), 1]);
             for v = 1:numel(design_var) 
                 spec_mean = mean(specdata{v}, 2);
