@@ -1,4 +1,4 @@
-function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, fit_mode, f_range, settings, return_model, plot_model)
+function STUDY = std_fooof_eeg(STUDY, ALLEEG, cluster, fit_mode, f_range, settings, return_model)
     % Author: The Voytek Lab and Brian Barry 
     % Calls FOOOF wrapper on spectral data from EEGLAB 
     
@@ -61,15 +61,15 @@ function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, fit_mode, f_
     end
     
     design_var = STUDY.design(STUDY.currentdesign).variable.value; %cell array of design variables
-    std_fooof_results = cell([numel(cluster), 1]); 
+    std_fooof_results = cell([numel(STUDY.cluster), 1]); % indexed by cluster
     
-    for c = 1:numel(cluster)
-        [STUDY, specdata, specfreqs] = std_specplot(STUDY,ALLEEG, 'clusters', cluster(c)); 
+    for c = cluster
+        [STUDY, specdata, specfreqs] = std_specplot(STUDY,ALLEEG, 'clusters', cluster(c), 'noplot', 'on'); 
         
         if strcmpi(fit_mode, 'group')
-            fooof_results_c = cell([numel(design_var), 1]);
+            fooof_results_c = cell([numel(design_var), 1]); %fooof results for a particular cluster, arranged by design variable
             for v = 1:numel(design_var) 
-                results_v = fooof_group(specfreqs, specdata{v}, f_range, settings, return_model); %specdata at design variable v shape {powers x trials}
+                results_v = fooof_group(specfreqs, specdata{v}, f_range, settings, return_model); %specdata at design variable v, shape {powers x trials}
                 fooof_results_c{v} = results_v;
             end
             std_fooof_results{c} = fooof_results_c;
@@ -83,25 +83,19 @@ function std_fooof_results = std_fooof_wrap(STUDY, ALLEEG, cluster, fit_mode, f_
             fooof_results_c = fooof_group(specfreqs, horzcat(design_spec{:}), f_range, settings, return_model); %horzcat makes designspec dims |psds| x #design variables
             std_fooof_results{c} = fooof_results_c;
         
-        elseif strcmpi(fit_mode, 'individual')
-            fooof_results_c = cell([numel(design_var), 1]);
-            for v = 1:numel(design_var) 
-                spec_mean = mean(specdata{v}, 2);
-                results_v = fooof(specfreqs, spec_mean, f_range, settings, return_model);
-                fooof_results_c{v} = results_v;
-            end
-            std_fooof_results{c} = fooof_results_c;
+        % elseif strcmpi(fit_mode, 'individual')
+        %     fooof_results_c = cell([numel(design_var), 1]);
+        %     for v = 1:numel(design_var) 
+        %         spec_mean = mean(specdata{v}, 2);
+        %         results_v = fooof(specfreqs, spec_mean, f_range, settings, return_model);
+        %         fooof_results_c{v} = results_v;
+        %     end
+        %     std_fooof_results{c} = fooof_results_c;
 
         end
     end
 
-    if plot_model %in development
-        ;
-    end
-
-    
-
-    
+    STUDY.etc.FOOOOF =  std_fooof_results;
         
     
     

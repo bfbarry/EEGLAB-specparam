@@ -10,8 +10,12 @@
 %                       Note: this argument is optional, defaults to false
 %
 
-function fooof_plot(fooof_results, log_freqs)
-
+function fooof_plot(fooof_results, log_freqs, single_fig)
+    % if single_fig, creates a new figure
+    %   assign false if using subplots
+    if ~exist('single_fig', 'var')
+        single_fig = true;
+    end
     %% Data Checking
 
     if ~isfield(fooof_results, 'freqs')
@@ -30,8 +34,9 @@ function fooof_plot(fooof_results, log_freqs)
     lw = 2.5;
 
     %% Create the plots
-
-    figure()
+    if single_fig
+        figure()
+    end
     hold on
 
     % Plot the original data
@@ -55,7 +60,8 @@ function fooof_plot(fooof_results, log_freqs)
 
     grid on
     legend('Original Spectrum', 'Full Model Fit', 'Aperiodic Fit')
-
-    hold off
+    if single_fig
+        hold off
+    end
 
 end

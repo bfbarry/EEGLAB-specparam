@@ -1,4 +1,4 @@
-function fooof_results = pop_fooof_wrap(EEG, ALLEEG, f_range, mode, settings)
+function eeg_fooof_results = fooof_eeg(EEG, f_range, psd, mode, settings)
     % Author: The Voytek Lab and Brian Barry 
     % Calls FOOOF wrapper on spectral data from EEGLAB
     
@@ -41,26 +41,17 @@ function fooof_results = pop_fooof_wrap(EEG, ALLEEG, f_range, mode, settings)
     %            fooof_results.fooofed_spectrum
     %            fooof_results.ap_fit
     
-    if nargin < 5 % need a better way to check because design may be empty too
+    if nargin < 6 
         settings = struct(); % empty settings      
     end
     
     if strcmpi(mode, 'single')
         % How to extract spectra for a dataset?  (probably by component?)
-        fooof_results = fooof(freqs, psd, f_range, settings, 'return_model', true);
+        fooof_results = fooof(freqs, psd, f_range, settings, 'return_model', true); %default return_model
     elseif strcmpi(mode, 'group')
-        STUDY, specdata, freqs = std_specplot(STUDY,ALLEEG, 'clusters', cluster); 
-        design = STUDY.design(design).variable
-        % need to decide on shape of specdata from study design 
-        fooof_results = zeros(size(design)(2))
-        for i = 1:size(design)(2) % for now assumes design is a 1xn array of conditions
-            temp_results = fooof_group(freqs, specdata, f_range, settings); %where specdata is an array of spectra
-            fooof_results = [fooof_results, temp_results]
-            % now foof_results is an array of fitting data, each index are fooof results for a condition in the design
-        end
-        
+        fooof_results = fooof_group(freqs, specdata, f_range, settings); %where specdata is an array of spectra
     end
         
-    
+    EEG.etc.FOOOF ;
     
     
