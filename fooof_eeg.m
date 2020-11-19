@@ -1,23 +1,16 @@
-function eeg_fooof_results = fooof_eeg(EEG, f_range, psd, mode, settings)
+function EEG = fooof_eeg(EEG, epoch_range, percent, f_range, icacomps, settings)
     % Author: The Voytek Lab and Brian Barry 
     % Calls FOOOF wrapper on spectral data from EEGLAB
     
-    % TODO: should this use fooof_group too? 
-    % - if so, want to incorporate foof_group()
-    % - incorporate statistics 
-    % - Decide on what to return
-    
-    % For fooof related docs see: https://github.com/fooof-tools/fooof_mat/blob/master/fooof_mat/
-    
-    % For relevant EEGLAB related docs see:
-    % https://github.com/sccn/eeglab/blob/develop/functions/popfunc/pop_spectopo.m
-    
-    % if mode = 'single', runs fooof.m (mode is tentative)
-    % if mode = 'group', runs fooof_group.m (once again unless a std_fooof_wrap.m is created)
+    % calls pop_spectopo.m to retrieve desired channel or component spectra 
+    % calls fooof_group even if only one component queried.
     
     % Inputs:
-    % EEG, ALLEEG
-    %   f_range         = fitting range (Hz)
+    %   EEG
+    %   epoch_range = [min_ms, max_ms]
+    %   percent  = [float 0 to 100] percent of the data to sample for computing the spectra. Values < 100 speed up the computation. {default: 100}
+    %   icacomps
+    %   f_range         = spectral computation range AND fitting range (Hz)
     %   power_spectrum  = row vector of power values (in group case psds = matrix of power values, which each row representing a spectrum)
     %   settings        = fooof model settings, in a struct, including:
     %       settings.peak_width_limts
@@ -41,17 +34,44 @@ function eeg_fooof_results = fooof_eeg(EEG, f_range, psd, mode, settings)
     %            fooof_results.fooofed_spectrum
     %            fooof_results.ap_fit
     
-    if nargin < 6 
-        settings = struct(); % empty settings      
+    if ~exist('epoch_range', 'var')
+        epoch_range = [EEG.xmin*1000, EEG.xmax*1000];
     end
     
-    if strcmpi(mode, 'single')
-        % How to extract spectra for a dataset?  (probably by component?)
-        fooof_results = fooof(freqs, psd, f_range, settings, 'return_model', true); %default return_model
-    elseif strcmpi(mode, 'group')
-        fooof_results = fooof_group(freqs, specdata, f_range, settings); %where specdata is an array of spectra
+    if ~exist('percent', 'var')
+        percent = 100;
     end
-        
-    EEG.etc.FOOOF ;
+
+    if ~exist('icacomps', 'var')
+        component = false;
+    else
+        component = true;
+    end
+
+    if ~exist('settings', 'var')
+        settings = struct();
+    end
     
-    
+    %compute spectrum and fit
+    if component
+        [eegspecdB, specfreqs, compeegspecdB] = pop_spectopo(EEG, 0, epoch_range, 'EEG', 'percent', percent , 'freq', [10], 'freqrange',f_range, 'plotchan', 0, 'icacomps', icacomps, 'nicamaps', 0,'electrodes','off', 'plot', 'off'); % icacomps actually useless
+        compeegspecdB = compeegspecdB(icacomps,:); % only selecting desired columns since pop_spectopo returns all components
+        specdata = arrayfun(@(y) 10^(y/10), compeegspecdB'); % reshaping + undoing the 10*log10(power) transformation
+        specfreqs = specfreqs';  %reshaping frequencies
+        fooof_results = cell([size(EEG.icaweights,1), 1]); % indexed by component
+
+        % computing FOOOF
+        fooof_results_temp = fooof_group(specfreqs, specdata, f_range, settings, true); 
+        for i = 1:numel(icacomps)
+            comp_i = icacomps(i);
+            fooof_results{comp_i} = fooof_results_temp(i);
+        end
+
+    else % channel case
+        [eegspecdB, specfreqs] = pop_spectopo(EEG, 1, epoch_range, 'EEG' , 'percent', percent, 'freq', [10], 'freqrange',f_range,'electrodes','off', 'plot', 'off');
+        specdata = arrayfun(@(y) 10^(y/10), eegspecdB'); % reshaping + undoing the 10*log10(power) transformation
+        specfreqs = specfreqs';  % reshaping frequencies
+        fooof_results = cell([size(EEG.icaweights,1), 1]); % indexed by component [for now]
+    end
+
+    EEG.etc.FOOOF_results = fooof_results; 

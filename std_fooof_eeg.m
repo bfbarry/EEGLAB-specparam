@@ -1,10 +1,9 @@
-function STUDY = std_fooof_eeg(STUDY, ALLEEG, cluster, fit_mode, f_range, settings, return_model)
+function STUDY = std_fooof_eeg(STUDY, ALLEEG, cluster, fit_mode, f_range, settings)
     % Author: The Voytek Lab and Brian Barry 
     % Calls FOOOF wrapper on spectral data from EEGLAB 
     
     % TODO: extract study design to accommodate foof_group()
     % - incorporate statistics 
-    % - Decide on what to return
     
     % For fooof related docs see: https://github.com/fooof-tools/fooof_mat/blob/master/fooof_mat/
     
@@ -51,10 +50,6 @@ function STUDY = std_fooof_eeg(STUDY, ALLEEG, cluster, fit_mode, f_range, settin
     if ~exist('settings', 'var')
         settings = struct();
     end
-
-    if ~exist('return_model', 'var')
-        return_model = false; % shape needs to be reexamined
-    end
     
     if ~exist('plot_model', 'var')
         plot_model = false; % shape needs to be reexamined
@@ -69,7 +64,7 @@ function STUDY = std_fooof_eeg(STUDY, ALLEEG, cluster, fit_mode, f_range, settin
         if strcmpi(fit_mode, 'group')
             fooof_results_c = cell([numel(design_var), 1]); %fooof results for a particular cluster, arranged by design variable
             for v = 1:numel(design_var) 
-                results_v = fooof_group(specfreqs, specdata{v}, f_range, settings, return_model); %specdata at design variable v, shape {powers x trials}
+                results_v = fooof_group(specfreqs, specdata{v}, f_range, settings, true); %specdata at design variable v, shape {powers x trials}
                 fooof_results_c{v} = results_v;
             end
             std_fooof_results{c} = fooof_results_c;
@@ -80,7 +75,7 @@ function STUDY = std_fooof_eeg(STUDY, ALLEEG, cluster, fit_mode, f_range, settin
                 spec_mean = mean(specdata{v}, 2); 
                 design_spec{v} = spec_mean; 
             end
-            fooof_results_c = fooof_group(specfreqs, horzcat(design_spec{:}), f_range, settings, return_model); %horzcat makes designspec dims |psds| x #design variables
+            fooof_results_c = fooof_group(specfreqs, horzcat(design_spec{:}), f_range, settings, true); %horzcat makes designspec dims |psds| x #design variables
             std_fooof_results{c} = fooof_results_c;
         
         % elseif strcmpi(fit_mode, 'individual')
@@ -95,8 +90,4 @@ function STUDY = std_fooof_eeg(STUDY, ALLEEG, cluster, fit_mode, f_range, settin
         end
     end
 
-    STUDY.etc.FOOOOF =  std_fooof_results;
-        
-    
-    
-    
+    STUDY.etc.FOOOF_results =  std_fooof_results;
