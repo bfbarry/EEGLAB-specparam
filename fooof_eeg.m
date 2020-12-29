@@ -9,17 +9,15 @@ function EEG = fooof_eeg(EEG, epoch_range, percent, f_range, icacomps, settings)
     %   EEG
     %   epoch_range = [min_ms, max_ms]
     %   percent  = [float 0 to 100] percent of the data to sample for computing the spectra. Values < 100 speed up the computation. {default: 100}
-    %   icacomps
     %   f_range         = spectral computation range AND fitting range (Hz)
-    %   power_spectrum  = row vector of power values (in group case psds = matrix of power values, which each row representing a spectrum)
+    %   icacomps = ICA components to include
     %   settings        = fooof model settings, in a struct, including:
-    %       settings.peak_width_limts
+    %       settings.peak_width_limits
     %       settings.max_n_peaks
     %       settings.min_peak_height
     %       settings.peak_threshold
     %       settings.aperiodic_mode
     %       settings.verbose
-    %   for single mode only: return_model    = boolean of whether to return the FOOOF model fit, optional
     
     % Current outputs (default from fooof_mat)
     %   fooof_results   = fooof model ouputs, in a struct, including:
@@ -28,7 +26,7 @@ function EEG = fooof_eeg(EEG, epoch_range, percent, f_range, icacomps, settings)
     %       fooof_results.gaussian_params
     %       fooof_results.error
     %       fooof_results.r_squared
-    %       for single case only: if return_model is true, it also includes:
+    %       and with return_model hard-coded as true, it also includes:
     %            fooof_results.freqs
     %            fooof_results.power_spectrum
     %            fooof_results.fooofed_spectrum
@@ -52,10 +50,14 @@ function EEG = fooof_eeg(EEG, epoch_range, percent, f_range, icacomps, settings)
         settings = struct();
     end
     
-    %compute spectrum and fit
+    % compute spectrum and fit
+    % extracting power spectrum w/ pop_spectopo
+    % psds as ___specdB = matrix of power values, with each row representing a spectrum)
     if component
         [eegspecdB, specfreqs, compeegspecdB] = pop_spectopo(EEG, 0, epoch_range, 'EEG', 'percent', percent , 'freq', [10], 'freqrange',f_range, 'plotchan', 0, 'icacomps', icacomps, 'nicamaps', 0,'electrodes','off', 'plot', 'off'); % icacomps actually useless
-        compeegspecdB = compeegspecdB(icacomps,:); % only selecting desired columns since pop_spectopo returns all components
+        if exist('icacomps', 'var')
+            compeegspecdB = compeegspecdB(icacomps,:); % only selecting desired rows (or should it be cols?) since pop_spectopo returns all components
+        end
         specdata = arrayfun(@(y) 10^(y/10), compeegspecdB'); % reshaping + undoing the 10*log10(power) transformation
         specfreqs = specfreqs';  %reshaping frequencies
         fooof_results = cell([size(EEG.icaweights,1), 1]); % indexed by component
