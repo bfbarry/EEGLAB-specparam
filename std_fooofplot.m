@@ -1,4 +1,4 @@
-function std_fooofplot(STUDY, ALLEEG, cluster, f_range, settings, log_freqs)
+function std_fooofplot(STUDY, ALLEEG, cluster_, f_range, log_freqs, settings)
     % plots FOOOF spectral fit for all conditions (averaged over components)
     
     % if ~isfield(STUDY.etc, 'FOOOF_results')
@@ -6,7 +6,7 @@ function std_fooofplot(STUDY, ALLEEG, cluster, f_range, settings, log_freqs)
     % end
 
     % design_var = STUDY.design(STUDY.currentdesign).variable.value; %cell array of design variables
-    % [STUDY, specdata, specfreqs] = std_specplot(STUDY,ALLEEG, 'clusters', cluster(c), 'noplot', 'on'); 
+    % [STUDY, specdata, specfreqs] = std_specplot(STUDY,ALLEEG, 'clusters', cluster_, 'noplot', 'on'); 
     
     % UNCOMMENT FOR TESTING
     load('~/Desktop/IversenLab/external/data/spectra/dip_only/brian_diponly_3_spectra.mat');

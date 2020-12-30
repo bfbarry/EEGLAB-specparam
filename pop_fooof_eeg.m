@@ -1,4 +1,4 @@
-function [params settings] = pop_fooof_eeg(EEG, varargin)
+function EEG = pop_fooof_eeg(EEG, varargin)
     % Author: The Voytek Lab and Brian Barry 
     % GUI for FOOOF wrapper on spectral data from EEGLAB
 
@@ -43,7 +43,7 @@ function [params settings] = pop_fooof_eeg(EEG, varargin)
             { 'style' 'text' 'string' 'peak_threshold' } ...
             { 'style' 'edit' 'string' '' } ...
             { 'style' 'text' 'string' 'aperiodic_mode' } ...
-            { 'style' 'edit' 'string' '"fixed"' } ... %want to make a checkmark later
+            { 'style' 'edit' 'string' "'fixed'" } ... %want to make a checkmark later
             { 'style' 'text' 'string' 'verbose (boolean)' } ...
             { 'style' 'edit' 'string' 'false' } };
     uigeom = { [12 4] [12 3] [12 3] [12 3] [1] [12 3] [12 3] [12 3] [12 3] [12 3] [12 3]};
@@ -62,7 +62,7 @@ function [params settings] = pop_fooof_eeg(EEG, varargin)
         end
     end
     
-    % EEG = fooof_eeg(EEG, params{1}, params{2}, params{3}, params{4}, settings);
+    EEG = fooof_eeg(EEG, params{1}, params{2}, params{3}, params{4}, settings);
 
     %%%%%%% THINGS TO MAYBE ADD %%%%%%
 

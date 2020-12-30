@@ -1,25 +1,10 @@
-function STUDY = pop_std_fooof_eeg(STUDY, varargin)
-    % Author: The Voytek Lab and Brian Barry 
-    % GUI for FOOOF wrapper on spectral data from EEGLAB
-
-    % For fooof related docs see: https://github.com/fooof-tools/fooof_mat/blob/master/fooof_mat/
-    
-    % For relevant EEGLAB related docs see:
-    % https://github.com/sccn/eeglab/blob/develop/functions/popfunc/pop_spectopo.m
-    
-    % Should have
-        % settings.peak_width_limits sets the possible lower- and upper-bounds for the fitted peak widths.
-        % settings.max_n_peaks sets the maximum number of peaks to fit.
-        % settings.min_peak_height sets an absolute limit on the minimum height (above aperiodic) for any extracted peak.
-        % settings.peak_threshold sets a relative threshold above which a peak height must cross to be included in the model.
-        % settings.aperiodic_mode defines the approach to use to parameterize the aperiodic component.
-
-    uilist = { { 'style' 'text' 'string' 'Clusters:' } ...
+function pop_std_fooofplot(STUDY, ALLEEG, varargin)
+    uilist = { { 'style' 'text' 'string' 'Cluster to plot:' } ... %could be drop down list
             { 'style' 'edit' 'string' '' } ...
-            { 'style' 'text' 'string' 'Fit mode ("group" or "across design"):' } ...
-            { 'style' 'edit' 'string' '"across design"' } ...
             { 'style' 'text' 'string' 'Frequency range to fit:' } ...
             { 'style' 'edit' 'string' '' } ...
+            { 'style' 'text' 'string' 'Plot in loglog (boolean):' } ... %could be checkmark
+            { 'style' 'edit' 'string' 'false' } ...
             ... % Now FOOOF settings
             { 'style' 'text' 'string' '                     FOOOF settings (optional)' 'fontweight' 'bold' }...       
             { 'style' 'text' 'string' 'peak_width_limits' } ...
@@ -31,12 +16,12 @@ function STUDY = pop_std_fooof_eeg(STUDY, varargin)
             { 'style' 'text' 'string' 'peak_threshold' } ...
             { 'style' 'edit' 'string' '' } ...
             { 'style' 'text' 'string' 'aperiodic_mode' } ...
-            { 'style' 'edit' 'string' "'fixed'" } ... %want to make a checkmark later
-            { 'style' 'text' 'string' 'verbose (boolean)' } ...
+            { 'style' 'edit' 'string' "'fixed'" } ... 
+            { 'style' 'text' 'string' 'verbose (boolean)' } ...%want to make a checkmark later
             { 'style' 'edit' 'string' 'false' } };
     uigeom = { [9 4] [9 3] [9 3] [1] [9 3] [9 3] [9 3] [9 3] [9 3] [9 3]};
     [result, usrdat, sres2, sres] = inputgui( 'uilist', uilist, 'geometry', uigeom, 'title', 'FOOOF EEG - pop_fooof_eeg()', 'helpcom', 'pophelp(''pop_fooof_eeg'');', 'userdata', 0); %currently ignoring usrdat, sres2, sres
-    params = {}; %parameters for std_fooof_eeg w/o FOOOF settings
+    params = {}; %parameters for std_fooofplot w/o FOOOF settings
     settings_keys = {'peak_width_limits','max_n_peaks','min_peak_height','peak_threshold','aperiodic_mode','verbose'};
     settings = struct(); %can be empty
     for i = 1:length(result)
@@ -50,4 +35,4 @@ function STUDY = pop_std_fooof_eeg(STUDY, varargin)
         end
     end
 
-    %STUDY = std_fooof_eeg(STUDY, ALLEEG, params{1}, params{2}, params{3}, settings);
+    std_fooofplot(STUDY, ALLEEG, params{1}, params{2}, params{3}, settings);

@@ -1,8 +1,8 @@
-function STUDY = std_fooof_eeg(STUDY, ALLEEG, cluster, fit_mode, f_range, settings)
+function STUDY = std_fooof_eeg(STUDY, ALLEEG, clusters, fit_mode, f_range, settings)
     % Author: The Voytek Lab and Brian Barry 
     % Calls FOOOF wrapper on spectral data from EEGLAB 
     
-    % TODO: extract study design to accommodate foof_group()
+    % TODO: extract study design to accommodate fooof_group()
     % - incorporate statistics 
     
     % For fooof related docs see: https://github.com/fooof-tools/fooof_mat/blob/master/fooof_mat/
@@ -58,8 +58,8 @@ function STUDY = std_fooof_eeg(STUDY, ALLEEG, cluster, fit_mode, f_range, settin
     design_var = STUDY.design(STUDY.currentdesign).variable.value; %cell array of design variables
     std_fooof_results = cell([numel(STUDY.cluster), 1]); % indexed by cluster
     
-    for c = cluster
-        [STUDY, specdata, specfreqs] = std_specplot(STUDY,ALLEEG, 'clusters', cluster(c), 'noplot', 'on'); 
+    for c = clusters
+        [STUDY, specdata, specfreqs] = std_specplot(STUDY,ALLEEG, 'clusters', c, 'noplot', 'on'); 
         
         if strcmpi(fit_mode, 'group')
             fooof_results_c = cell([numel(design_var), 1]); %fooof results for a particular cluster, arranged by design variable
