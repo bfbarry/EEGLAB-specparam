@@ -12,7 +12,8 @@ function std_fooofplot(STUDY, ALLEEG, cluster_, f_range, log_freqs, settings)
     load('~/Desktop/IversenLab/external/data/spectra/dip_only/brian_diponly_3_spectra.mat');
     design_var = {'a','b','c','d'};
     settings.verbose = false;
-
+    %%%%%%%%
+    
     design_spec = cell([numel(design_var), 1]); %averaged spectra – this is what you see when you call Study -> Edit/plot component clusters
     for v = 1:numel(design_var)
         spec_mean = mean(specdata{v}, 2);

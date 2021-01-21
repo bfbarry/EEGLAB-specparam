@@ -1,4 +1,4 @@
-function EEG = fooof_eeg(EEG, epoch_range, percent, f_range, icacomps, settings)
+function EEG = eeg_fooof(EEG, epoch_range, percent, f_range, icacomps, settings)
     % Author: The Voytek Lab and Brian Barry 
     % Calls FOOOF wrapper on spectral data from EEGLAB
     

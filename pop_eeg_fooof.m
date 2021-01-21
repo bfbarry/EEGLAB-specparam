@@ -1,4 +1,4 @@
-function EEG = pop_fooof_eeg(EEG, varargin)
+function [EEG, LASTCOM] = pop_eeg_fooof(EEG, varargin)
     % Author: The Voytek Lab and Brian Barry 
     % GUI for FOOOF wrapper on spectral data from EEGLAB
 
@@ -46,8 +46,8 @@ function EEG = pop_fooof_eeg(EEG, varargin)
             { 'style' 'edit' 'string' "'fixed'" } ... %want to make a checkmark later
             { 'style' 'text' 'string' 'verbose (boolean)' } ...
             { 'style' 'edit' 'string' 'false' } };
-    uigeom = { [12 4] [12 3] [12 3] [12 3] [1] [12 3] [12 3] [12 3] [12 3] [12 3] [12 3]};
-    [result, usrdat, sres2, sres] = inputgui( 'uilist', uilist, 'geometry', uigeom, 'title', 'FOOOF EEG - pop_fooof_eeg()', 'helpcom', 'pophelp(''pop_fooof_eeg'');', 'userdata', 0); %currently ignoring usrdat, sres2, sres
+    uigeom = { [11 4] [11 3] [11 3] [11 3] [1] [11 3] [11 3] [11 3] [11 3] [11 3] [11 3]};
+    [result, usrdat, sres2, sres] = inputgui( 'uilist', uilist, 'geometry', uigeom, 'title', 'FOOOF EEG - pop_eeg_fooof()', 'helpcom', 'pophelp(''pop_eeg_fooof'');', 'userdata', 0); %currently ignoring usrdat, sres2, sres
     params = {}; %parameters for fooof_eeg w/o FOOOF settings
     settings_keys = {'peak_width_limits','max_n_peaks','min_peak_height','peak_threshold','aperiodic_mode','verbose'};
     settings = struct(); %can be empty
@@ -62,7 +62,7 @@ function EEG = pop_fooof_eeg(EEG, varargin)
         end
     end
     
-    EEG = fooof_eeg(EEG, params{1}, params{2}, params{3}, params{4}, settings);
+    EEG = eeg_fooof(EEG, params{1}, params{2}, params{3}, params{4}, settings);
 
     %%%%%%% THINGS TO MAYBE ADD %%%%%%
 
@@ -71,3 +71,4 @@ function EEG = pop_fooof_eeg(EEG, varargin)
     % com = sprintf('pop_sample( %s, %d, [%s] );', inputname(1), typeproc, int2str(param3));
 
     % return;
+    LASTCOM = '';

@@ -35,7 +35,7 @@ function STUDY = pop_std_fooof_eeg(STUDY, varargin)
             { 'style' 'text' 'string' 'verbose (boolean)' } ...
             { 'style' 'edit' 'string' 'false' } };
     uigeom = { [9 4] [9 3] [9 3] [1] [9 3] [9 3] [9 3] [9 3] [9 3] [9 3]};
-    [result, usrdat, sres2, sres] = inputgui( 'uilist', uilist, 'geometry', uigeom, 'title', 'FOOOF EEG - pop_fooof_eeg()', 'helpcom', 'pophelp(''pop_fooof_eeg'');', 'userdata', 0); %currently ignoring usrdat, sres2, sres
+    [result, usrdat, sres2, sres] = inputgui( 'uilist', uilist, 'geometry', uigeom, 'title', 'FOOOF EEG - pop_std_fooof_eeg()', 'helpcom', 'pophelp(''pop_fooof_eeg'');', 'userdata', 0); %currently ignoring usrdat, sres2, sres
     params = {}; %parameters for std_fooof_eeg w/o FOOOF settings
     settings_keys = {'peak_width_limits','max_n_peaks','min_peak_height','peak_threshold','aperiodic_mode','verbose'};
     settings = struct(); %can be empty
