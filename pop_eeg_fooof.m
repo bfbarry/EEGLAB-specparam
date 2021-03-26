@@ -49,21 +49,22 @@ function [EEG, LASTCOM] = pop_eeg_fooof(EEG, varargin)
     uigeom = { [11 4] [11 3] [11 3] [11 3] [1] [11 3] [11 3] [11 3] [11 3] [11 3] [11 3]};
     [result, usrdat, sres2, sres] = inputgui( 'uilist', uilist, 'geometry', uigeom, 'title', 'FOOOF EEG - pop_eeg_fooof()', 'helpcom', 'pophelp(''pop_eeg_fooof'');', 'userdata', 0); %currently ignoring usrdat, sres2, sres
     params = {}; %parameters for fooof_eeg w/o FOOOF settings
-    settings_keys = {'peak_width_limits','max_n_peaks','min_peak_height','peak_threshold','aperiodic_mode','verbose'};
+    settings_keys = {'peak_width_limits','max_n_peaks','min_peak_height','peak_threshold','aperiodic_mode','verbose'}; %the FOOOF settings
     settings = struct(); %can be empty
     for i = 1:length(result)
-        if i < 5
+        if i < 5 % spectral settings
             param_curr = eval( [ '[' result{i} ']' ] );
             params{end+1} = param_curr;
-        else
+        else % FOOOF settings
             if ~isempty(eval( [ '[' result{i} ']' ] ))
                 settings.(settings_keys{i-4}) = eval( [ '[' result{i} ']' ] );
             end
         end
     end
     
-    EEG = eeg_fooof(EEG, params{1}, params{2}, params{3}, params{4}, settings);
-
+    EEG = eeg_fooof(EEG, params{1}, params{2}, params{3}, params{4}, settings);            % epoch 1        epoch 2    percent   f_range1      f_range2
+    LASTCOM = sprintf('EEG = eeg_fooof(EEG, [%d %d], %d, [%d %d], [ %d ], settings)', params{1}(1), params{1}(2), params{2}, params{3}(1), params{3}(2), params{4}); % ! still have to add settings (how?)
+    
     %%%%%%% THINGS TO MAYBE ADD %%%%%%
 
     % return the string command: !! line 1 should be [EEG, COM] = function(...)
@@ -71,4 +72,4 @@ function [EEG, LASTCOM] = pop_eeg_fooof(EEG, varargin)
     % com = sprintf('pop_sample( %s, %d, [%s] );', inputname(1), typeproc, int2str(param3));
 
     % return;
-    LASTCOM = '';
+    

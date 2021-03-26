@@ -1,4 +1,6 @@
 function pop_eeg_fooofplot(EEG, varargin)
+    % Similar to pop_eeg_fooof but only plots one IC/chan at a time
+
     uilist = {{ 'style' 'text' 'string' 'Type of data to fit and plot (component or channel):' } ...
             { 'style' 'edit' 'string' '"component"' } ... 
             { 'style' 'text' 'string' 'IC/channel to plot:' } ... %could be drop down list
@@ -27,7 +29,7 @@ function pop_eeg_fooofplot(EEG, varargin)
             { 'style' 'edit' 'string' 'false' } };
     uigeom = { [12 4] [12 3] [12 3] [12 3] [12 3] [12 3] [1] [12 3] [12 3] [12 3] [12 3] [12 3] [12 3]}; %12
     [result, usrdat, sres2, sres] = inputgui( 'uilist', uilist, 'geometry', uigeom, 'title', 'FOOOF EEG - pop_eeg_fooofplot()', 'helpcom', 'pophelp(''pop_eeg_fooofplot'');', 'userdata', 0); %currently ignoring usrdat, sres2, sres
-    params = {}; %parameters for std_fooofplot w/o FOOOF settings
+    params = {}; %parameters for eeg_fooofplot w/o FOOOF settings
     settings_keys = {'peak_width_limits','max_n_peaks','min_peak_height','peak_threshold','aperiodic_mode','verbose'};
     settings = struct(); %can be empty
     for i = 1:length(result)
