@@ -1,5 +1,6 @@
 function eeg_fooofplot(EEG, epoch_range, percent, datatype, id, f_range, log_freqs, settings)
     % Plot FOOOF results for individual ICs channels
+    % id: component or channel id
     %   datatype = "channel" or "component"
     
     if ~exist('epoch_range', 'var')

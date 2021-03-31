@@ -1,4 +1,4 @@
-function pop_eeg_fooofplot(EEG, varargin)
+function LASTCOM = pop_eeg_fooofplot(EEG, varargin)
     % Similar to pop_eeg_fooof but only plots one IC/chan at a time
 
     uilist = {{ 'style' 'text' 'string' 'Type of data to fit and plot (component or channel):' } ...
@@ -44,3 +44,4 @@ function pop_eeg_fooofplot(EEG, varargin)
     end
 
     eeg_fooofplot(EEG, params{3}, params{4}, params{1}, params{2}, params{5}, params{6}, settings);
+    LASTCOM = sprintf('EEG = eeg_fooofplot(EEG, [%d %d], %d, "%s", %d, [%d %d], %d, settings)', params{3}(1), params{3}(2), params{4}, params{1}, params{2}, params{5}(1), params{5}(2), params{6}); % ! still have to add settings (how?)

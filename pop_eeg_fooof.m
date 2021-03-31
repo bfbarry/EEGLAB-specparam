@@ -62,8 +62,8 @@ function [EEG, LASTCOM] = pop_eeg_fooof(EEG, varargin)
         end
     end
     
-    EEG = eeg_fooof(EEG, params{1}, params{2}, params{3}, params{4}, settings);            % epoch 1        epoch 2    percent   f_range1      f_range2
-    LASTCOM = sprintf('EEG = eeg_fooof(EEG, [%d %d], %d, [%d %d], [ %d ], settings)', params{1}(1), params{1}(2), params{2}, params{3}(1), params{3}(2), params{4}); % ! still have to add settings (how?)
+    EEG = eeg_fooof(EEG, params{1}, params{2}, params{3}, params{4}, settings);            % epoch 1        epoch 2    percent   f_range1      f_range2   % components (using weird workaround to format an array)
+    LASTCOM = sprintf('EEG = eeg_fooof(EEG, [%d %d], %d, [%d %d], [ %s ], settings)', params{1}(1), params{1}(2), params{2}, params{3}(1), params{3}(2), sprintf('%d ', params{4})); % ! still have to add settings (how?)
     
     %%%%%%% THINGS TO MAYBE ADD %%%%%%
 
