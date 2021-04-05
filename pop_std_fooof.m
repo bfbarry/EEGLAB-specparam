@@ -1,4 +1,4 @@
-function STUDY = pop_std_fooof_eeg(STUDY, varargin)
+function [STUDY LASTCOM] = pop_std_fooof(STUDY, ALLEEG)
     % Author: The Voytek Lab and Brian Barry 
     % GUI for FOOOF wrapper on spectral data from EEGLAB
 
@@ -50,4 +50,5 @@ function STUDY = pop_std_fooof_eeg(STUDY, varargin)
         end
     end
 
-    %STUDY = std_fooof_eeg(STUDY, ALLEEG, params{1}, params{2}, params{3}, settings);
+    STUDY = std_fooof(STUDY, ALLEEG, params{1}, params{2}, params{3}, settings);
+    LASTCOM = ' ';

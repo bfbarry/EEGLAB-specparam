@@ -1,4 +1,4 @@
-function pop_std_fooofplot(STUDY, ALLEEG, varargin)
+function LASTCOM = pop_std_fooofplot(STUDY, ALLEEG, varargin)
     uilist = { { 'style' 'text' 'string' 'Cluster to plot:' } ... %could be drop down list
             { 'style' 'edit' 'string' '' } ...
             { 'style' 'text' 'string' 'Frequency range to fit:' } ...
@@ -36,3 +36,4 @@ function pop_std_fooofplot(STUDY, ALLEEG, varargin)
     end
 
     std_fooofplot(STUDY, ALLEEG, params{1}, params{2}, params{3}, settings);
+    LASTCOM= ' ';

@@ -1,4 +1,4 @@
-function STUDY = std_fooof_eeg(STUDY, ALLEEG, clusters, fit_mode, f_range, settings)
+function STUDY = std_fooof(STUDY, ALLEEG, clusters, fit_mode, f_range, settings)
     % Author: The Voytek Lab and Brian Barry 
     % Calls FOOOF wrapper on spectral data from EEGLAB 
     
@@ -12,7 +12,7 @@ function STUDY = std_fooof_eeg(STUDY, ALLEEG, clusters, fit_mode, f_range, setti
     
     % Inputs:
     % STUDY, ALLEEG
-    % cluster is a range or array of clusters, e.g. 3:14
+    % clusters is a range or array of clusters, e.g. 3:14
     % fit_mode: if 'group' (default), performs fooof_group for each design variable spectrum
     %    if 'across design' performs fooof_group on spectrum of averaged design variables
     %    if 'individual' performs fooof on each averaged design variable
@@ -41,7 +41,6 @@ function STUDY = std_fooof_eeg(STUDY, ALLEEG, clusters, fit_mode, f_range, setti
     %            fooof_results.power_spectrum
     %            fooof_results.fooofed_spectrum
     %            fooof_results.ap_fit
-    addpath('fooof_mat');
     
     if ~exist('fit_mode', 'var')
         fit_mode = 'group';
