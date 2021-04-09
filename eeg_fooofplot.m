@@ -18,13 +18,13 @@ function eeg_fooofplot(EEG, epoch_range, percent, datatype, id, f_range, log_fre
     if datatype == "component"
         [eegspecdB, specfreqs, compeegspecdB] = pop_spectopo(EEG, 0, epoch_range, 'EEG', 'percent', percent , 'freq', [10], 'freqrange',f_range, 'plotchan', 0, 'icacomps', id, 'nicamaps', 0,'electrodes','off', 'plot', 'off'); %icacomps doesn't do anything
         specfreqs = specfreqs';  %reshaping frequencies
-        compeegspecdB = compeegspecdB(id,:); % only selecting desired rows (or should it be cols?) since pop_spectopo returns all components
+        compeegspecdB = compeegspecdB(id,:); % only selecting desired rows since pop_spectopo returns all components
         specdata = arrayfun(@(y) 10^(y/10), compeegspecdB); %undoing the 10*log10(power) transformation
         fooof_results = fooof(specfreqs, specdata, f_range, settings, true);
     else %channel case
         [eegspecdB, specfreqs] = pop_spectopo(EEG, 1, epoch_range, 'EEG' , 'percent', percent, 'freq', [10], 'freqrange',f_range,'electrodes','off', 'plot', 'off');
         specfreqs = specfreqs';  %reshaping frequencies
-        eegspecdB = eegspecdB(id,:); %need to verify
+        eegspecdB = eegspecdB(id,:); 
         specdata = arrayfun(@(y) 10^(y/10), eegspecdB); % reshaping + undoing the 10*log10(power) transformation
         
         fooof_results = fooof(specfreqs, specdata, f_range, settings, true);
