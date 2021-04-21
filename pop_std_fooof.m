@@ -51,4 +51,5 @@ function [STUDY LASTCOM] = pop_std_fooof(STUDY, ALLEEG)
     end
 
     STUDY = std_fooof(STUDY, ALLEEG, params{1}, params{2}, params{3}, settings);
-    LASTCOM = ' ';
+    LASTCOM = sprintf('STUDY = std_fooof(STUDY, ALLEEG, [ %s ], "%s", [%d %d],  %s)', sprintf('%d ', params{1}), params{2}, params{3}(1), params{3}(2), struct2str(settings)); 
+                                                                                            % clusters           %fit mode      % f_range1        f_range2    settings  

@@ -36,4 +36,5 @@ function LASTCOM = pop_std_fooofplot(STUDY, ALLEEG, varargin)
     end
 
     std_fooofplot(STUDY, ALLEEG, params{1}, params{2}, params{3}, settings);
-    LASTCOM= ' ';
+    LASTCOM = sprintf('STUDY = std_fooofplot(STUDY, ALLEEG, [ %s ], [%d %d], %s,  %s)', sprintf('%d ', params{1}), params{2}(1), params{2}(2), params{3}, struct2str(settings)); 
+                                                                                                % clusters            % f_range1        f_range2     %loglog    settings  
