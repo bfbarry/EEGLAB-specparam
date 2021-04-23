@@ -54,6 +54,9 @@ function [EEG, LASTCOM] = pop_eeg_fooof(EEG, varargin)
         end
     end
     
-    EEG = eeg_fooof(EEG, params{1}, params{2}, params{3}, params{4}, params{5}, settings); 
-    LASTCOM = sprintf('EEG = eeg_fooof(EEG, %s, [ %s ], [%d %d], %d, [%d %d],  %s)', params{1}, sprintf('%d ', params{2}), params{3}(1), params{3}(2), params{4}, params{5}(1), params{5}(2), struct2str(settings)); 
-                                                                                        % datatype              %ids             % epoch 1        epoch 2    percent   f_range1      f_range2   
+    if ~isempty(params)
+        EEG = eeg_fooof(EEG, params{1}, params{2}, params{3}, params{4}, params{5}, settings); 
+        LASTCOM = sprintf('EEG = eeg_fooof(EEG, %s, [ %s ], [%d %d], %d, [%d %d],  %s)', params{1}, sprintf('%d ', params{2}), params{3}(1), params{3}(2), params{4}, params{5}(1), params{5}(2), struct2str(settings)); 
+    else                                                                                   % datatype              %ids             % epoch 1        epoch 2    percent   f_range1      f_range2   
+        LASTCOM = '';
+    end

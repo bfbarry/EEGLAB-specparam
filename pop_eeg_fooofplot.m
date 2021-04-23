@@ -43,5 +43,9 @@ function LASTCOM = pop_eeg_fooofplot(EEG, varargin)
         end
     end
 
-    eeg_fooofplot(EEG, params{3}, params{4}, params{1}, params{2}, params{5}, params{6}, settings);
-    LASTCOM = sprintf('EEG = eeg_fooofplot(EEG, [%d %d], %d, "%s", %d, [%d %d], %d, %s)', params{3}(1), params{3}(2), params{4}, params{1}, params{2}, params{5}(1), params{5}(2), params{6}, struct2str(settings));
+    if ~isempty(params)
+        eeg_fooofplot(EEG, params{3}, params{4}, params{1}, params{2}, params{5}, params{6}, settings);
+        LASTCOM = sprintf('EEG = eeg_fooofplot(EEG, [%d %d], %d, "%s", %d, [%d %d], %d, %s)', params{3}(1), params{3}(2), params{4}, params{1}, params{2}, params{5}(1), params{5}(2), params{6}, struct2str(settings));
+    else
+        LASTCOM = '';
+    end
