@@ -1,7 +1,9 @@
 function eegplugin_fooof(fig,try_strings,catch_strings)
     % keyboard
-    addpath('fooof_mat');
-    addpath('utils');
+    plugin_path = fileparts(mfilename('fullpath'))
+    addpath(fullfile(plugin_path,'/utils'))
+    addpath(fullfile(plugin_path,'/fooof_mat'))
+    
     eeg_fooof_command = [try_strings.no_check '[EEG LASTCOM] = pop_eeg_fooof(EEG);' catch_strings.store_and_hist];
     eeg_fooofplot_command = [try_strings.no_check 'LASTCOM = pop_eeg_fooofplot(EEG);' catch_strings.store_and_hist];
 
@@ -17,6 +19,3 @@ function eegplugin_fooof(fig,try_strings,catch_strings)
     submenu = uimenu(std_menu, 'Label', 'FOOOF', 'userdata', 'startup:off;study:on', 'separator', 'on');
     uimenu( submenu, 'label', 'Fit power spectra', 'callback',std_fooof_command, 'userdata', 'startup:off;study:on');
     uimenu(submenu, 'label', 'Plot cluster fit', 'callback', std_fooofplot_command, 'userdata', 'startup:off;study:on', 'separator','on');
-
-    % uimenu( submenu, 'label', 'Fit power spectra', 'callback','[STUDY LASTCOM] = pop_std_fooof(STUDY, ALLEEG);', 'userdata', 'startup:off;study:on');
-    % uimenu(submenu, 'label', 'Plot cluster fit', 'callback', 'LASTCOM = pop_std_fooofplot(STUDY, ALLEEG);', 'userdata', 'startup:off;study:on', 'separator','on');

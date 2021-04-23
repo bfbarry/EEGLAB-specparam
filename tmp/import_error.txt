@@ -1,9 +1,0 @@
-Error using <frozen importlib>_find_and_load_unlocked (line 953)
-Python Error: ModuleNotFoundError: No module named '/home/brian/Packages/numpy'
-
-Error in <frozen importlib>_find_and_load (line 971)
-
-Error in <frozen importlib>_gcd_import (line 994)
-
-Error in __init__>import_module (line 126)
-    return _bootstrap._gcd_import(name[level:], package, level)
