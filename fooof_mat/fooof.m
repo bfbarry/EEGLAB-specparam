@@ -59,6 +59,20 @@ function fooof_results = fooof(freqs, power_spectrum, f_range, settings, return_
     fooof_results = fm.get_results();
     fooof_results = fooof_unpack_results(fooof_results);
     
+    % Adding band powers to fooof_results:
+    delta_band = py.list([1,4]);delta_power = py.fooof.utils.trim_spectrum(freqs,power_spectrum,delta_band);
+    theta_band = py.list([4,8]);theta_power = py.fooof.utils.trim_spectrum(freqs,power_spectrum,theta_band);
+    alpha_band = py.list([8,13]);alpha_power = py.fooof.utils.trim_spectrum(freqs,power_spectrum,alpha_band);
+    beta_band = py.list([13,30]);beta_power = py.fooof.utils.trim_spectrum(freqs,power_spectrum,beta_band);
+    gamma_band = py.list([30,50]);gamma_power = py.fooof.utils.trim_spectrum(freqs,power_spectrum,gamma_band);
+    fooof_results.bandfreqs = [double(delta_power{1});double(theta_power{1});double(alpha_power{1});double(beta_power{1});double(gamma_power{1})];
+    fooof_results.bandpowers = [
+        double(delta_power{2});
+        double(theta_power{2});
+        double(alpha_power{2});
+        double( beta_power{2});
+        double(gamma_power{2})];
+
     % Re-calculating r-squared
     %   r_squared doesn't seem to get computed properly (in NaN).
     %   It is unclear why this happens, other than the error can be traced
