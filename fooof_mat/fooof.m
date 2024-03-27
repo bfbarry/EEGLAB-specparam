@@ -62,9 +62,9 @@ function fooof_results = fooof(freqs, power_spectrum, f_range, settings, return_
     % Adding band powers to fooof_results:
     delta_band = py.list([1,4]);delta_power = py.fooof.utils.trim_spectrum(freqs,power_spectrum,delta_band);
     theta_band = py.list([4,8]);theta_power = py.fooof.utils.trim_spectrum(freqs,power_spectrum,theta_band);
-    alpha_band = py.list([8,13]);alpha_power = py.fooof.utils.trim_spectrum(freqs,power_spectrum,alpha_band);
-    beta_band = py.list([13,30]);beta_power = py.fooof.utils.trim_spectrum(freqs,power_spectrum,beta_band);
-    gamma_band = py.list([30,50]);gamma_power = py.fooof.utils.trim_spectrum(freqs,power_spectrum,gamma_band);
+    alpha_band = py.list([8,14]);alpha_power = py.fooof.utils.trim_spectrum(freqs,power_spectrum,alpha_band);
+    beta_band = py.list([14,30]);beta_power = py.fooof.utils.trim_spectrum(freqs,power_spectrum,beta_band);
+    gamma_band = py.list([30,45]);gamma_power = py.fooof.utils.trim_spectrum(freqs,power_spectrum,gamma_band);
     fooof_results.bandfreqs =  {double(delta_power{1});
                                 double(theta_power{1});
                                 double(alpha_power{1});
