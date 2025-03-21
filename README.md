@@ -1,4 +1,4 @@
-# FOOOF for EEGLAB
+# FOOOF for EEGLAB (note: this repository is no longer maintained)
 
 FOOOF is a fast, efficient, and physiologically-informed tool to parameterize neural power spectra. To learn more about it, please visit the [official FOOOF repository](https://github.com/fooof-tools/fooof).
 
