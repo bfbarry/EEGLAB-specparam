@@ -1,4 +1,5 @@
-# FOOOF for EEGLAB (note: this repository is no longer maintained)
+# FOOOF for EEGLAB 
+⚠️ Warning: This repository is no longer maintained - use at your own risk. If you would like to parameterize neural power spectra with FOOOF in MATLAB, please refer to the [official documentation](https://fooof-tools.github.io/fooof/#other-language-support). For the most up to date implementation, please use the Python version.
 
 FOOOF is a fast, efficient, and physiologically-informed tool to parameterize neural power spectra. To learn more about it, please visit the [official FOOOF repository](https://github.com/fooof-tools/fooof).
 
